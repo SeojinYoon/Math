@@ -474,19 +474,19 @@ Q.E.D. (Quod Erat Demonstrandum - Which was to be demonstrated)
 
 # Laplace transform
 
-## Where Does the Laplace Transform Come From?
+## Where does the Laplace transform come from?
 
 The Laplace transform naturally arises when extending a discrete power series (or generating function) into a continuous domain.
 
-Before explaining the process, let's check the notation for power series. We can type the power series in two ways.
+Before explaining the process, let's review the notation for power series. A power series can be written in two ways.
 1. Index notation:$$\sum_{n=0}^{\infty} a_n x^n$$
 2. Function notation:$$\sum_{n=0}^{\infty} a(n) x^n$$
 
 To make this continuous, we replace the discrete index $n$ with a continuous variable $t$, and the summation with an integral:$$A(x) = \int_{0}^{\infty} a(t) x^t \, dt$$
 
 For this integral to converge for a wide range of functions, we typically require $0 < x < 1$. This restriction ensures:
-1. $x > 0$ avoids dealing with multi-valued complex powers for real $t$.
-2. $x < 1$ ensures that $\ln x < 0$, providing an exponentially decaying factor that helps the integral converge.
+1. $0 < x < 1 \rightarrow x > 0$ avoids dealing with multi-valued complex powers for real $t$.
+2. $0 < x < 1 \rightarrow x < 1$ ensures that $\ln x < 0$, providing an exponentially decaying factor that helps the integral converge.
 
 Since $\ln x$ is negative over $0 < x < 1$, handling negative numbers directly in formulas can be counterintuitive and lead to sign errors. Therefore, we define a new positive variable $s$ such that:$$\ln x = -s \quad (\text{or } s = -\ln x > 0)$$
 
@@ -501,7 +501,7 @@ The Laplace transform is a linear transform (or linear operator), which is one o
 - Additivity:$$\mathcal{L}\{f(t) + g(t)\} = \mathcal{L}\{f(t)\} + \mathcal{L}\{g(t)\}$$
 - Homogeneity (Scalar Multiplication):$$\mathcal{L}\{c f(t)\} = c \mathcal{L}\{f(t)\} \quad (\text{where } c \text{ is a constant})$$
 
-## f(t)
+## Case: f(t)
 
 Let's see what the result of Laplace transform in the various case of f(t)
 
@@ -556,7 +556,81 @@ Let's see what the result of Laplace transform in the various case of f(t)
     $$\lim_{t \to \infty} \frac{t^n e^{-st}}{-s} = -\frac{1}{s} \lim_{t \to \infty} \frac{t^n}{e^{st}} = 0 \quad (\text{by } n \text{ applications of L'Hôpital's rule})$$
     $$\mathcal{L}\{t^n\} = 0 - 0 + \frac{n}{s} \int_0^\infty t^{n-1} e^{-st} \, dt = \frac{n}{s} \mathcal{L}\{t^{n-1}\} \quad (s > 0)$$
     $$\begin{aligned} \mathcal{L}\{t^n\} &= \frac{n}{s} \mathcal{L}\{t^{n-1}\} \\ &= \frac{n}{s} \cdot \frac{n-1}{s} \mathcal{L}\{t^{n-2}\} \\ &= \frac{n(n-1)(n-2)\cdots 1}{s^n} \mathcal{L}\{t^0\} \\ &= \frac{n!}{s^n} \mathcal{L}\{1\} \end{aligned}$$
+
+### Cases where the Laplace transform works well
+
+Because the Laplace transform introduces an exponential decay factor that suppresses the integrand, it works well in cases where this suppression guarantees convergence. In this context, the core requirement is that $f(t)$ is of exponential order (or exponential type).
+
+A function $f(t)$ is said to be of exponential order $\alpha$ if there exist constants $M > 0$ and $\alpha$ such that the following inequality holds for all sufficiently large $t$:$$\vert{}f(t)\vert{} \le M e^{\alpha t}$$
+
+- Example of exponential type
+    - $\sin(t)$
+        * $\vert{}\sin(t)\vert{} \le 1 \cdot e^{0 \cdot t} = 1$
+    - $t^n$
+        * $t^n < \frac{n!}{\alpha^n} e^{\alpha t}$
+    - $\frac{t^n}{e^t} = t^n e^{-t}$ 
+        * $\vert{}f(t)\vert{} \le M = M e^{0 \cdot t}$
+- Example of non exponential type
+    - $\frac{1}{t}$
+        * While $f(t) = \frac{1}{t}$ is of exponential order as $t \to \infty$ (since $\vert{}\frac{1}{t}\vert{} \le 1$ for all $t \ge 1$), its Laplace transform does not exist because it violates the piecewise continuity / local integrability condition near $t = 0$.
+            * Decomposition of the Laplace Integral:$$\mathcal{L}\left\{\frac{1}{t}\right\} = \int_0^\infty \frac{1}{t} e^{-st} \, dt = \int_0^1 \frac{1}{t} e^{-st} \, dt + \int_1^\infty \frac{1}{t} e^{-st} \, dt$$
+            * Divergence Near the Origin ($t \to 0$):Since $e^{-st} \to 1$ as $t \to 0$, for sufficiently small $\epsilon > 0$ with $\text{Re}(s) > 0$, we have $e^{-st} \ge e^{-s}$ (or bounded away from 0). The integral diverges logarithmically:$$\int_0^1 \frac{1}{t} e^{-st} \, dt \ge e^{-\text{Re}(s)} \int_0^1 \frac{1}{t} \, dt = e^{-\text{Re}(s)} \lim_{\epsilon \to 0^+} \left[ \ln t \right]_\epsilon^1 = \infty$$
+            * Conclusion: The damping factor $e^{-st}$ only suppresses growth as $t \to \infty$; it cannot prevent the singularity at $t = 0$. Hence, the Laplace transform does not exist.
+    - $e^{t^{2}}$
+        * Unlike $1/t$, the function $f(t) = e^{t^2}$ is continuous everywhere on $[0, \infty)$. However, its Laplace transform does not exist for any complex number $s$ because the function grows too fast and is not of exponential order.
+        * Why it is not of exponential order:For $f(t)$ to be of exponential order, there must exist constants $M > 0$ and $\alpha$ such that:$$\vert{}f(t)\vert{} \le M e^{\alpha t} \quad \implies \quad \frac{e^{t^2}}{e^{\alpha t}} \le M$$However, for any choice of constant $\alpha$:$$\lim_{t \to \infty} \frac{e^{t^2}}{e^{\alpha t}} = \lim_{t \to \infty} e^{t(t - \alpha)} = \infty$$Since $t^2$ dominates any linear term $\alpha t$ as $t \to \infty$, no finite constant $M$ can bound $e^{t^2}$.
+
+## Laplace transform and solving differential equation
+
+### The process using Laplace transform to solve differential equation
+
+Solving an Initial Value Problem (IVP) using the Laplace transform follows a structured 4-step pipeline that maps a differential equation from the time domain ($t$) into an algebraic equation in the complex frequency domain ($s$), and then back to the time domain.
+
+
+1. Apply the Laplace Transform to Both Sides: Converts differential operators into algebraic expressions while embedding initial conditions.
+
     
+
+    Apply the Laplace transform $\mathcal{L}\{\cdot\}$ to each term of the differential equation. Using the differentiation property, replace time derivatives with algebraic terms in $s$ and let $\overline{\underline{Y}}(s) = \mathcal{L}\{y(t)\}$:
+
+    - $\mathcal{L}\{y'(t)\} = s\overline{\underline{Y}}(s) - y(0)$
+    - $\mathcal{L}\{y''(t)\} = s^2 \overline{\underline{Y}}(s) - s y(0) - y'(0)$
+    - $\mathcal{L}\{y^{(n)}(t)\} = s^n \overline{\underline{Y}}(s) - s^{n-1}y(0) - \dots - y^{(n-1)}(0)$
+
+    Substitute the numerical initial conditions ($y(0), y'(0)$, etc.) directly into the equation at this initial step.
+
+2. Solve Algebraically for Y(s): Reduces the differential problem to polynomial algebra without arbitrary constants
+
+    Treat $\overline{\underline{Y}}(s)$ as an algebraic unknown. Collect all terms containing $\overline{\underline{Y}}(s)$ on one side of the equation, factor out $\overline{\underline{Y}}(s)$, and isolate it as a single rational function:$$\overline{\underline{Y}}(s) = \frac{P(s)}{Q(s)}$$
+
+    Here, the denominator $Q(s)$ corresponds to the characteristic polynomial of the ODE, while the numerator $P(s)$ contains the combined contributions of the initial conditions and the transformed forcing function.
+
+3. Perform Partial Fraction Decomposition: Decomposes high-order rational expressions into standard transformable units.
+
+    Because table lookup pairs consist of low-degree elementary terms, factor the denominator $Q(s)$ into linear or irreducible quadratic factors, then expand $\overline{\underline{Y}}(s)$ into simpler partial fractions:$$\overline{\underline{Y}}(s) = \frac{A}{s - p_1} + \frac{B}{s - p_2} + \frac{Cs + D}{(s - \alpha)^2 + \beta^2} + \dots$$
+
+    Compute the unknown coefficients ($A, B, C, \dots$) using methods such as the Heaviside cover-up technique or polynomial coefficient matching.
+
+4. Take the Inverse Laplace Transform: Transforms the algebraic expression back to the time-domain solution.
+
+    Apply the inverse Laplace transform $\mathcal{L}^{-1}\{\cdot\}$ term by term to $\overline{\underline{Y}}(s)$ using standard transform pairs:
+    - $\mathcal{L}^{-1}\left\{\frac{1}{s - a}\right\} = e^{at}$
+    - $\mathcal{L}^{-1}\left\{\frac{\omega}{s^2 + \omega^2}\right\} = \sin(\omega t)$
+    - $\mathcal{L}^{-1}\left\{\frac{s}{s^2 + \omega^2}\right\} = \cos(\omega t)$
+    
+    The resulting function $y(t) = \mathcal{L}^{-1}\{\overline{\underline{Y}}(s)\}$ is the unique solution to the IVP, naturally satisfying all initial conditions without requiring an auxiliary system of equations for integration constants.
+
+### Why do we use it for solving differential equation?
+
+To solve an ODE using the classical approach, we must follow these steps sequentially:
+1. Find the homogeneous solution ($y_h$)
+2. Find the particular solution ($y_p$)
+3. Combine them to form the general solution ($y = y_h + y_p$)
+4. Determine the constants of integration using the initial conditions (for an IVP)
+
+As the order of the differential equation increases, Step 4 becomes computationally heavier because we must solve larger systems of simultaneous equations. In contrast, the Laplace transform naturally incorporates the initial conditions from the start, directly yielding the unique solution in a single algebraic workflow.
+
+
 # Difference between an Integral Transform and a Standard Differential Operator
 
 - Transform (e.g., Laplace / Fourier): Converts a function $f(t)$ into a new function $F(s)$ in a different domain (variable space)

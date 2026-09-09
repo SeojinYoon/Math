@@ -112,8 +112,8 @@ In 2D rotation, the rotation axis $\mathbf{\hat{v}}$ is perpendicular to the $xy
 
 # Rodrigues Rotation Formula
 
-![alt text](RodriguesRotation_geometry.png)
-![alt text](RodriguesRotation_formula.png)
+![alt text](rodriguesrotation_geometry.png)
+![alt text](rodriguesrotation_formula.png)
 
 **Summary**
 
