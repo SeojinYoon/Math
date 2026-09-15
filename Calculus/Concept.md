@@ -187,3 +187,30 @@ Improper integral은 일반적인 Riemann integral의 정의를 직접 적용할
 
    - 정의 방식 (극한 사용, $x=a$에서 발산할 때):$$\int_{a}^{b} f(x)\,dx = \lim_{t \to a^+} \int_{t}^{b} f(x)\,dx$$
    - 예시 ($x=0$에서 $1/\sqrt{x} \to \infty$):$$\int_{0}^{1} \frac{1}{\sqrt{x}}\,dx = \lim_{t \to 0^+} \left[ 2\sqrt{x} \right]_{t}^{1} = \lim_{t \to 0^+} (2 - 2\sqrt{t}) = 2$$
+
+# The Distinction Between Differential and Derivative
+
+In calculus, decomposing a quantity $y$ into an infinitesimal change element $dy$ is the operation called taking the differential, whereas dividing this element by $dx$ gives the derivative.
+- Extracting the Infinitesimal Element (Differential):$$y \;\longrightarrow\; dy$$  
+   This isolates the pure infinitesimal increment $dy$ generated when the overall state $y$ undergoes a slight variation.
+- Computing the Rate of Change (Derivative):$$y \;\longrightarrow\; \frac{dy}{dx}$$  
+   This scales the decomposed change $dy$ relative to the driving increment $dx$. It normalizes the variation into a ratio (velocity, slope, or sensitivity), describing how many units the output changes per unit change in input.
+
+# The Fundamental Duality: Differentiation and Integration
+
+Placing these operations in direct correspondence reveals their core structural symmetry:
+
+- Differentiation ($y \rightarrow dy$): 
+
+   Peels back the accumulated whole y, disassembling it into momentary increments of change (dy).
+
+- Integration ($dy \rightarrow y$):
+
+   Accumulates every single infinitesimal slice ($dy$) from beginning to end using the integral operator $\int$ (derived from summa). By stitching these infinitely many tiny pieces back together, it restores the complete cumulative whole $y$:$$\int dy = y$$
+
+Taking the differential deconstructs a whole into infinitesimal pieces; integration collects every piece from start to finish to restore the whole.
+
+# Why Do We Break Things Down?
+
+Because our perception is far narrower than the world itself, we inevitably break things down and piece them back together—much like differentiation and integration—to expand the boundaries of our understanding. Likewise, we dissect the brain down to single neurons, hoping that by aggregating this knowledge, we might ultimately reconstruct intelligence in artificial form.
+

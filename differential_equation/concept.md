@@ -474,7 +474,31 @@ Q.E.D. (Quod Erat Demonstrandum - Which was to be demonstrated)
 
 # Laplace transform
 
-## Where does the Laplace transform come from?
+The Laplace transform is a mathematical tool that converts a complex differential equation in the time domain into an easy-to-solve algebraic equation in the complex frequency domain.
+
+$$ t \rightarrow s $$
+
+## Intuition
+
+### What is the s?
+
+$s$ is a complex variable combining frequency and decay rate into a single number: $s = \sigma + j\omega$.
+- $\sigma$ (real part, attenuation/growth rate): represents the exponential factor ($e^{-\sigma t}$) governing how the signal's amplitude changes over time.
+- $\omega$ (imaginary part, angular frequency): represents the oscillatory component ($e^{j\omega t} = \cos \omega t + j\sin \omega t$), indicating how rapidly the signal rotates or vibrates over time.
+
+The true essence of the Laplace transform formula, $F(s) = \int_0^\infty f(t) e^{-st} \, dt$, lies in asking:
+
+"How much of the fundamental wave component ($e^{-st}$)—oscillating at frequency $\omega$ and decaying at rate $\sigma$—is present within an arbitrary, complex signal $f(t)$?"
+
+It is a process of decomposing and measuring these individual wave components, and the outcome of this measurement is precisely the function of $s$, denoted as $F(s)$.
+
+### Why do we use it?
+
+TODO
+
+## Background
+
+### Where does the Laplace transform come from?
 
 The Laplace transform naturally arises when extending a discrete power series (or generating function) into a continuous domain.
 
@@ -495,13 +519,16 @@ Substituting $\ln x = -s$ yields the classic Laplace transform and the notations
 1. $\mathcal{L}\{a(t)\} = \int_{0}^{\infty} a(t) e^{-st} \, dt$
 2. $ f(t) \rightsquigarrow F(s) $
 
-## Linearity
+## Property
+
+### Linearity
 
 The Laplace transform is a linear transform (or linear operator), which is one of its most fundamental and powerful properties. This means it satisfies both additivity and scalar multiplication:
 - Additivity:$$\mathcal{L}\{f(t) + g(t)\} = \mathcal{L}\{f(t)\} + \mathcal{L}\{g(t)\}$$
 - Homogeneity (Scalar Multiplication):$$\mathcal{L}\{c f(t)\} = c \mathcal{L}\{f(t)\} \quad (\text{where } c \text{ is a constant})$$
 
-## Case: f(t)
+
+## Example
 
 Let's see what the result of Laplace transform in the various case of f(t)
 
@@ -580,16 +607,58 @@ A function $f(t)$ is said to be of exponential order $\alpha$ if there exist con
         * Unlike $1/t$, the function $f(t) = e^{t^2}$ is continuous everywhere on $[0, \infty)$. However, its Laplace transform does not exist for any complex number $s$ because the function grows too fast and is not of exponential order.
         * Why it is not of exponential order:For $f(t)$ to be of exponential order, there must exist constants $M > 0$ and $\alpha$ such that:$$\vert{}f(t)\vert{} \le M e^{\alpha t} \quad \implies \quad \frac{e^{t^2}}{e^{\alpha t}} \le M$$However, for any choice of constant $\alpha$:$$\lim_{t \to \infty} \frac{e^{t^2}}{e^{\alpha t}} = \lim_{t \to \infty} e^{t(t - \alpha)} = \infty$$Since $t^2$ dominates any linear term $\alpha t$ as $t \to \infty$, no finite constant $M$ can bound $e^{t^2}$.
 
-## Laplace transform and solving differential equation
+**Mathematical Mechanism: How Initial Conditions Naturally Emerge**
 
-### The process using Laplace transform to solve differential equation
+The mechanism enabling this algebraic simplification is the Laplace transform of derivatives. When transforming a derivative, applying integration by parts automatically extracts the boundary value (initial condition) while converting the derivative operator into multiplication by $s$.
+
+1. First-Order Derivative: $\mathcal{L}\{f'(t)\}$
+
+    By definition, the Laplace transform of the first derivative is:$$\mathcal{L}\{f'(t)\} = \int_{0}^{\infty} e^{-st} f'(t) \, dt$$
+
+    Applying integration by parts:
+    - Let $u = e^{-st} \implies du = -s e^{-st} \, dt$
+    - Let $dv = f'(t) \, dt \implies v = f(t)$
+
+    By definition of Integration by Parts: $$\int_{a}^{b} u \, dv = \Big[ u \cdot v \Big]_{a}^{b} - \int_{a}^{b} v \, du$$
+
+    This yields: $$\int_{0}^{\infty} \underbrace{e^{-st}}_{u} \cdot \underbrace{f'(t) \, dt}_{dv}$$
+
+    $$\mathcal{L}\{f'(t)\} = \left[ e^{-st} f(t) \right]_{0}^{\infty} - \int_{0}^{\infty} (-s e^{-st}) f(t) \, dt$$
+
+    Evaluating both components:
+
+    - The Boundary Term: Assuming $f(t)$ is of exponential order (i.e., $\vert{}f(t)\vert{} < C e^{kt}$ for $s > k$), the upper limit vanishes as $t \to \infty$:$$\lim_{t \to \infty} e^{-st} f(t) = \lim_{t \to \infty} \frac{f(t)}{e^{st}} = 0$$
+
+    Evaluating at the lower limit ($t = 0$) gives:$$\left[ e^{-st} f(t) \right]_{0}^{\infty} = 0 - e^{0} f(0) = -f(0)$$
+
+    This boundary evaluation is the exact moment the initial condition $f(0)$ enters the algebraic equation.
+
+    - The Integral Term: Factoring out the constant scalar $s$ leaves the definition of the transform itself:$$-\int_{0}^{\infty} (-s e^{-st}) f(t) \, dt = s \int_{0}^{\infty} e^{-st} f(t) \, dt = s F(s)$$
+
+    Combining these terms gives the fundamental operational identity:$$\mathcal{L}\{f'(t)\} = s F(s) - f(0)$$
+
+2. Higher-Order Derivatives: $\mathcal{L}\{f''(t)\}$
+
+    Higher-order derivatives are handled recursively by treating $f''(t)$ as $[f'(t)]'$:$$\mathcal{L}\{f''(t)\} = s \mathcal{L}\{f'(t)\} - f'(0)$$
+
+    Substituting the first-order result $\mathcal{L}\{f'(t)\} = s F(s) - f(0)$:$$\mathcal{L}\{f''(t)\} = s \Big( s F(s) - f(0) \Big) - f'(0) = s^2 F(s) - s f(0) - f'(0)$$
+
+    By induction, for an $n$-th order derivative:$$\mathcal{L}\{f^{(n)}(t)\} = s^n F(s) - s^{n-1} f(0) - s^{n-2} f'(0) - \dots - f^{(n-1)}(0)$$
+
+Key Takeaways
+- Differentiation becomes multiplication: The differential operator $\frac{d}{dt}$ maps to multiplication by the complex variable $s$.
+- Initial conditions are embedded, not solved: All Cauchy initial conditions ($f(0), f'(0), \dots, f^{(n-1)}(0)$) appear as additive polynomial terms from the very first step, converting a calculus differential equation into a straightforward algebraic equation for $F(s)$
+
+## Application
+
+### Laplace transform and solving differential equation
+
+#### The process using Laplace transform to solve differential equation
 
 Solving an Initial Value Problem (IVP) using the Laplace transform follows a structured 4-step pipeline that maps a differential equation from the time domain ($t$) into an algebraic equation in the complex frequency domain ($s$), and then back to the time domain.
 
 
 1. Apply the Laplace Transform to Both Sides: Converts differential operators into algebraic expressions while embedding initial conditions.
-
-    
 
     Apply the Laplace transform $\mathcal{L}\{\cdot\}$ to each term of the differential equation. Using the differentiation property, replace time derivatives with algebraic terms in $s$ and let $\overline{\underline{Y}}(s) = \mathcal{L}\{y(t)\}$:
 
@@ -620,7 +689,7 @@ Solving an Initial Value Problem (IVP) using the Laplace transform follows a str
     
     The resulting function $y(t) = \mathcal{L}^{-1}\{\overline{\underline{Y}}(s)\}$ is the unique solution to the IVP, naturally satisfying all initial conditions without requiring an auxiliary system of equations for integration constants.
 
-### Why do we use it for solving differential equation?
+#### Why do we use Laplace transform for solving differential equation?
 
 To solve an ODE using the classical approach, we must follow these steps sequentially:
 1. Find the homogeneous solution ($y_h$)
