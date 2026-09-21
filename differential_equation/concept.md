@@ -486,15 +486,90 @@ $s$ is a complex variable combining frequency and decay rate into a single numbe
 - $\sigma$ (real part, attenuation/growth rate): represents the exponential factor ($e^{-\sigma t}$) governing how the signal's amplitude changes over time.
 - $\omega$ (imaginary part, angular frequency): represents the oscillatory component ($e^{j\omega t} = \cos \omega t + j\sin \omega t$), indicating how rapidly the signal rotates or vibrates over time.
 
+The bilateral/unilateral Laplace transform is defined as:$$X(s) = \int_{0}^{\infty} x(t) e^{-st} dt$$ Substituting $s = \sigma + j\omega$ into the exponent makes the operational division of labor immediately clear:$$e^{-st} = e^{-(\sigma + j\omega)t} = \underbrace{e^{-\sigma t}}_{\text{Real: Amplitude Envelope}} \cdot \underbrace{e^{-j\omega t}}_{\text{Imaginary: Pure Rotation}}$$
+- $e^{-j\omega t}$ (Imaginary Part):  
+    As established with Euler’s formula, placing a pure imaginary number in the exponent produces a constant-radius circular rotation at angular velocity $\omega$. It does not change the magnitude; it solely governs frequency and phase.
+- $e^{-\sigma t}$ (Real Part):  
+    A real exponential acts strictly on the magnitude (envelope).
+    - If $\sigma > 0$, the amplitude decays exponentially toward zero ($e^{-\sigma t} \to 0$ as $t \to \infty$).
+    - If $\sigma < 0$, the amplitude explodes toward infinity.
+
+**Recall: Rotating a complex number $z$**
+
+Recall that any 2D point in the complex plane can be written in polar form:$$z = r e^{j\theta} = r(\cos\theta + j\sin\theta)$$where $r = \vert{}z\vert{}$ is the radial distance (amplitude) and $\theta$ is the initial phase angle.
+
+To rotate this point by an additional angle $\Delta\theta$:
+- We simply multiply by a unit complex number whose exponent is purely imaginary:$$e^{j\Delta\theta} = \cos\Delta\theta + j\sin\Delta\theta \quad (\vert{}e^{j\Delta\theta}\vert{} = 1)$$
+- Performing the multiplication:$$z' = z \cdot e^{j\Delta\theta} = (r e^{j\theta}) \cdot e^{j\Delta\theta} = r e^{j(\theta + \Delta\theta)}$$
+
+Because $\vert{}e^{j\Delta\theta}\vert{} = 1$, the amplitude remains completely untouched ($\vert{}z'\vert{} = r$), while the angle advances to $\theta + \Delta\theta$.
+
+If the rotation happens continuously over time at an angular rate $\omega$, the rotating vector is:$$z(t) = z_0 e^{j\omega t}$$
+
+This produces pure, uniform circular motion with a constant radius.
+
+**Introducing the Laplace Kernel: $e^{-st}$**
+
+The Laplace transform introduces the complex frequency parameter $s = \sigma + j\omega$. When applied in the kernel $e^{-st}$, we decompose the exponent into its real and imaginary parts:$$e^{-st} = e^{-(\sigma + j\omega)t} = \underbrace{e^{-\sigma t}}_{\text{Real Exponent: Amplitude Scaling}} \cdot \underbrace{e^{-j\omega t}}_{\text{Imaginary Exponent: Pure Rotation}}$$
+
+Applying this operator to an initial complex state $z_0 = r_0 e^{j\theta_0}$ yields:$$z(t) = z_0 \cdot e^{-st} = (r_0 e^{j\theta_0}) \cdot (e^{-\sigma t} e^{-j\omega t}) = \underbrace{\left(r_0 e^{-\sigma t}\right)}_{\text{Time-Varying Amplitude}} \cdot \underbrace{e^{j(\theta_0 - \omega t)}}_{\text{Time-Varying Angle}}$$
+
+Notice how the two tasks are split cleanly between the two components:
+- The Imaginary Part ($-j\omega t$):Constrained to $\vert{}e^{-j\omega t}\vert{} = 1$. It alters the phase angle by $-\omega t$ (a clockwise rotation at angular velocity $\omega$), but cannot change the distance from the origin.
+- The Real Part ($e^{-\sigma t}$):Has zero rotational effect. It acts as an exponential envelope, continuously scaling the radial distance $r(t) = r_0 e^{-\sigma t}$.
+
+**Essence**
+
 The true essence of the Laplace transform formula, $F(s) = \int_0^\infty f(t) e^{-st} \, dt$, lies in asking:
 
 "How much of the fundamental wave component ($e^{-st}$)—oscillating at frequency $\omega$ and decaying at rate $\sigma$—is present within an arbitrary, complex signal $f(t)$?"
 
 It is a process of decomposing and measuring these individual wave components, and the outcome of this measurement is precisely the function of $s$, denoted as $F(s)$.
 
-### Why do we use it?
+## How Multiplying a Real Signal by $e^{-j\omega t}$ "Rotates" It
 
-TODO
+Real-world signals—such as audio, sensor data, or voltages—are strictly 1D real numbers over time. They oscillate up and down along a straight line with no intrinsic concept of an angle or a 2D plane.
+
+Multiplying a real signal $x(t)$ by $e^{-j\omega t}$ does not rotate the signal in isolation; rather, it winds the 1D signal around the origin of the 2D complex plane like thread around a spool.
+
+### 1. The Mathematical Mechanism: Vector Modulation
+
+Recall Euler's identity:$$e^{-j\omega t} = \cos(\omega t) - j\sin(\omega t)$$
+
+When you multiply the 1D real signal $x(t)$ by this unit phasor:$$z(t) = x(t) \cdot e^{-j\omega t} = \underbrace{\big(x(t)\cos(\omega t)\big)}_{\text{Real axis (horizontal)}} - j\underbrace{\big(x(t)\sin(\omega t)\big)}_{\text{Imaginary axis (vertical)}}$$
+
+This product produces a dynamic 2D vector $z(t)$ whose components have distinct functions:
+- $e^{-j\omega t}$ serves as a rotating unit arm: It spins around the origin at a constant angular velocity $\omega$, providing the directional phase.
+- $x(t)$ serves as an instantaneous length dial: It scales the length of that spinning arm at every instant $t$.
+
+When the signal is large, the vector stretches outward. When the signal drops to zero, the vector contracts to the origin. If the signal goes negative, the vector points in the exact opposite direction.
+
+In physical terms, the 1D time-domain waveform is wrapped onto the 2D complex plane at a rotational rate of $\omega$ radians per second.
+
+### 2. Why Wrap the Signal into a Rotation? (Finding Resonance)
+
+The core purpose of transforming $x(t)$ into a spinning 2D trajectory becomes clear when looking at the integral in the Fourier or Laplace transform:$$X(\omega) = \int_{0}^{T} x(t)e^{-j\omega t} dt$$
+
+Integration over time is mathematically equivalent to computing the center of mass (average position) of the wound trajectory in the complex plane.
+
+**Case A: The wrapping frequency $\omega$ does not match the signal frequency $\omega_0$**
+
+- As the arm spins, peaks and troughs of $x(t)$ land evenly in all directions—north, south, east, and west.
+- The points scatter symmetrically around the origin.
+- When integrated (averaged), opposing vectors cancel each other out:$$\int x(t)e^{-j\omega t} dt \approx 0$$
+- The center of mass stays firmly pinned at $(0, 0)$.
+
+**Case B: The wrapping frequency $\omega$ perfectly matches the signal frequency $\omega_0$**
+- Every time the signal hits a positive peak, the rotating arm is pointing in the exact same direction (for instance, pointing right along the positive real axis).
+- Every time the signal dips or flips, the rotation aligns accordingly.
+- The points no longer cancel out; they bunch up heavily on one side of the complex plane.
+- When integrated, the center of mass pulls strongly away from the origin:$$\int x(t)e^{-j\omega t} dt \gg 0$$
+
+**Summary**
+
+Multiplying $x(t)$ by $e^{-j\omega t}$ takes a 1D fluctuation and casts it as the instantaneous radial magnitude of a continuously spinning clock hand.
+
+Summing those vectors across time cancels out unaligned frequencies through destructive interference, isolating only the frequencies that sync with the rotation.
 
 ## Background
 

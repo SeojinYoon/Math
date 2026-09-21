@@ -1,7 +1,38 @@
 
 # Euler number
 
-# Euler's formula
+## Nature
+
+$$\frac{dy}{dt} = y$$
+
+Many fundamental processes of change in nature follow this differential equation:
+> Cell division: As the cell population increases, the number of dividing cells increases at the exact same pace.
+> Continuous compounding: As the accumulated principal grows, the interest added at each moment grows proportionally.
+
+The change is not imposed by an arbitrary external pace; the rate of change simply depends on the state itself. The solution to this equation is $y(t) = e^t$. This is why mathematicians regard $e$ as the truly 'natural' base.
+
+## Circle
+
+$$\frac{dz}{dt} = iz$$
+
+Now, bring this natural engine into a two-dimensional space—the complex plane.
+
+In one dimension, the velocity vector $\frac{dy}{dt}$ points in the same direction as the position vector $y$, resulting in runaway exponential expansion ($y = e^t$). But what happens if the rate of change is forced to turn perpendicular to the position at every instant?
+
+In the complex plane, multiplying by the imaginary unit $i$ rotates any vector by 90 degrees counterclockwise. Replacing the scalar rate with $i$ alters the dynamics completely:
+
+The velocity is always perpendicular to the current position: $\frac{dz}{dt} \perp z$.
+
+Because the velocity points neither outward nor inward, the distance from the origin never changes ($\vert{}z(t)\vert{} = 1$). The motion cannot escape along a straight line; instead, it is bent into a continuous, eternal orbit.
+
+The solution to this differential equation is:$$z(t) = e^{it}$$
+
+Projecting this circular motion onto the real (horizontal) and imaginary (vertical) axes yields Euler's formula:$$e^{it} = \cos(t) + i\sin(t)$$
+
+Cosine and sine are not arbitrary geometric ratios that bridge the exponential function to a circle. Rather, $e^{it}$ is the pure, coordinate-free engine of rotation, and $\cos(t)$ and $\sin(t)$ are merely its shadows cast onto orthogonal axes.
+
+## Euler's formula
+
 Mathematician Leonhard Euler favored the function $e^x$ because it is the only function that remains unchanged after differentiation. He wondered, 'What would happen if $x$ were replaced by the imaginary unit $ix$?'
 He discovered a fascinating property: when $e^{ix}$ is differentiated twice, it becomes the negative of itself, as shown below.
 
