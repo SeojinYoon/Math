@@ -1,6 +1,38 @@
 
 # Euler number
 
+## Origin and Discovery
+
+Historically, the constant $e$ was not discovered by analyzing geometric curves or abstract differential equations, but through a very practical financial problem investigated by Jacob Bernoulli in 1683: the limit of continuous compound interest.
+
+1. **Bernoulli's Compounding Thought Experiment**
+
+    Consider a principal of $1$ invested at a nominal interest rate of $100\%$ per year:
+
+    - Compounded once a year:$$\left(1 + \frac{1}{1}\right)^1 = 2$$
+    - Compounded semi-annually (twice a year, 50% each):$$\left(1 + \frac{1}{2}\right)^2 = 2.25$$
+    - Compounded monthly ($12$ times a year):$$\left(1 + \frac{1}{12}\right)^{12} \approx 2.613$$
+    - Compounded daily ($365$ times a year):$$\left(1 + \frac{1}{365}\right)^{365} \approx 2.71456$$
+
+    Bernoulli asked: If interest is credited continuously over infinitely small intervals ($n \to \infty$), will the wealth diverge to infinity?$$\lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n$$
+
+    Using the binomial theorem, he proved that this sequence does not explode to infinity; instead, it converges strictly to a finite limit between $2$ and $3$ ($\approx 2.71828\dots$). Bernoulli proved that this bound existed, but he did not identify its profound connection to calculus.
+2. **Euler's Formulation as the Universal Scaling Factor**
+
+    Decades later, Leonhard Euler bridged Bernoulli's compounding limit with differential calculus and formally designated the constant as $e$ in his Introductio in analysin infinitorum (1748).
+
+    Euler demonstrated that $e$ can be represented as the infinite series:$$e = \sum_{k=0}^{\infty} \frac{1}{k!} = 1 + \frac{1}{1!} + \frac{1}{2!} + \frac{1}{3!} + \dots$$
+
+    More importantly, Euler uncovered its exact role in the differentiation of exponential functions. When differentiating an arbitrary exponential function $f(x) = a^x$ from first principles:$$\frac{d}{dx} a^x = a^x \cdot \lim_{h \to 0} \frac{a^h - 1}{h}$$
+
+    The resulting derivative is proportional to the original value $a^x$, but scaled by an extraneous scalar constant:
+    - If $a = 2$, $\lim_{h \to 0} \frac{2^h - 1}{h} \approx 0.693$
+    - If $a = 3$, $\lim_{h \to 0} \frac{3^h - 1}{h} \approx 1.098$
+
+    Euler observed that there exists a uniquely balanced base where this intrinsic scaling constant equals precisely $1$:$$\lim_{h \to 0} \frac{e^h - 1}{h} = 1 \implies \frac{d}{dx} e^x = e^x$$
+
+    This special base turned out to be the exact same constant Bernoulli had derived from compound interest. The Euler number e is therefore not an arbitrary mathematical invention; it is the unique universal base where continuous growth feeds back into its own rate of change with an exact 1:1 ratio, without requiring any external correction factor.
+    
 ## Nature
 
 $$\frac{dy}{dt} = y$$
@@ -49,11 +81,49 @@ $$ e^{ix} = \cos(x) + i\sin(x) $$
 ## Euler's formula and polar coordinate
 
 $$ e^{i\theta} $$
-In the polar coordinate system, a point is represented as $(r, \theta)$, where $r$ denotes the radius and $\theta$ denotes the angle. Using Euler’s formula, the same point can be expressed as $r(\cos \theta + i \sin \theta)$ or $re^{i\theta}$. This form effectively separates the position into real and imaginary components through cosine and sine functions, allowing any point on the plane to be expressed compactly.
 
-$$ (r, \theta) \leftrightarrow re^{i\theta} $$
+In the standard polar coordinate system, a point on the plane is designated as an ordered pair $(r, \theta)$, where $r$ denotes the radial distance and $\theta$ specifies the angular displacement. Via Euler’s formula, this spatial point can be rewritten algebraically as:$$(r, \theta) \longleftrightarrow r(\cos \theta + i \sin \theta) = r e^{i\theta}$$
 
-While pure polar notation $(r, \theta)$ provides a visual description, it lacks inherent rules for direct calculation. For instance, when rotating a vector, we typically add angles mentally and update the tuple. However, Euler’s formula allows this to be represented as a formal operation: $r_{1} e^{i\theta_1} \cdot r_{2}e^{i\theta_2} = r_{1}r_{2}e^{i(\theta_1+\theta_2)}$.
+While both notations map to identical geometric locations on the two-dimensional plane, they possess fundamentally different algebraic capabilities: polar coordinates provide a static labeling scheme, whereas the complex exponential $r e^{i\theta}$ functions as an active dynamic engine.
+
+1. From Manual Labeling to Built-in Algebraic Rotation
+
+    Pure polar notation $(r, \theta)$ provides an intuitive descriptive coordinate, but it lacks intrinsic algebraic operations defined directly on the tuples.
+
+    - When combining or rotating states under pure polar coordinates, one must manually intervene: multiplying radii, mentally summing angles, and manually rewriting the tuple:$$(r_1, \theta_1) \text{ and } (r_2, \theta_2) \implies (r_1 r_2, \;\theta_1 + \theta_2)$$
+    - In contrast, expressing the coordinates as complex exponentials automates this process through standard exponent laws:$$\left(r_1 e^{i\theta_1}\right) \cdot \left(r_2 e^{i\theta_2}\right) = (r_1 r_2) e^{i(\theta_1 + \theta_2)}$$
+
+    The geometric rotation does not need to be tracked as a separate geometric procedure; the underlying algebraic structure of exponentiation naturally executes the rotational shift without human intervention.
+
+2. Calculus Without Rotating Basis Vectors
+
+    The most decisive advantage of $r e^{i\theta}$ emerges when differentiating cyclic and oscillatory systems with respect to time ($t$).
+
+    **Differentiating in Polar Coordinates**
+
+    In classical vector calculus, a position vector in polar coordinates is written as $\mathbf{r}(t) = r \hat{\mathbf{r}}(\theta)$. Because the basis vectors $\hat{\mathbf{r}}$ and $\hat{\boldsymbol{\theta}}$ rotate alongside the point, their directions continuously change over time:$$\frac{d\hat{\mathbf{r}}}{dt} = \dot{\theta}\hat{\boldsymbol{\theta}}, \quad \frac{d\hat{\boldsymbol{\theta}}}{dt} = -\dot{\theta}\hat{\mathbf{r}}$$
+
+    Evaluating velocity and acceleration requires product-rule expansion across changing unit vectors, giving rise to geometric artifacts such as the Coriolis and centrifugal terms.
+
+    **Differentiating with Complex Exponentials**
+
+    When represented as $z(t) = r e^{i\omega t}$ (where $\omega = \frac{d\theta}{dt}$), differentiation ceases to be a geometric tracking problem and reduces to elementary scalar multiplication:$$\text{Position: } z(t) = r e^{i\omega t}$$
+
+    $$\text{Velocity: } \frac{dz}{dt} = i\omega \cdot \left(r e^{i\omega t}\right) = i\omega \cdot z(t)$$
+
+    $$\text{Acceleration: } \frac{d^2z}{dt^2} = (i\omega)^2 z(t) = -\omega^2 z(t)$$
+
+    Every time-derivative simply introduces a factor of $i\omega$. The scalar $i$ directly encapsulates the geometric reality: the velocity vector is always orthogonal ($90^\circ$) to the position vector, oriented purely tangentially along the circle.
+
+3. The Linear Eigenfunction of Cyclic Systems
+
+    Under the differential operator $D = \frac{d}{dt}$, pure trigonometric components swap roles and alter forms ($\cos \to -\sin \to -\cos$). Consequently, individual coordinates in a polar tuple do not form independent eigenfunctions.
+
+    In contrast, $e^{i\omega t}$ serves as an exact eigenfunction of the differential operator:$$\frac{d}{dt} e^{i\omega t} = \lambda e^{i\omega t} \quad (\text{where } \lambda = i\omega)$$
+
+    Because differentiation acts merely as multiplication by the eigenvalue $i\omega$, linear differential equations governing harmonic oscillators, wave equations, and neural network oscillations can be converted directly into simple algebraic systems.
+
+    Thus, $re^{iθ}$ is not merely an alternative way to write the polar tuple $(r,θ)$; it is the natural algebraic structure that renders rotation, circular motion, and wave mechanics solvable through elementary arithmetic.
 
 ## Transition to dynamics
 

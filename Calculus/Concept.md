@@ -214,3 +214,57 @@ Taking the differential deconstructs a whole into infinitesimal pieces; integrat
 
 Because our perception is far narrower than the world itself, we inevitably break things down and piece them back together—much like differentiation and integration—to expand the boundaries of our understanding. Likewise, we dissect the brain down to single neurons, hoping that by aggregating this knowledge, we might ultimately reconstruct intelligence in artificial form.
 
+# Differentiation
+
+Differentiation is the act of zooming in on the change in one quantity relative to the change in another.
+
+In this sense, differentiating $e^x$ is the act of observing how $e^x$ changes relative to $x$ at a local scale. Remarkably, the derivative of $e^x$ is simply $e^x$ itself, which means its instantaneous rate of change is directly determined by its current value.
+
+## Definition of differentiation
+
+Differentiation can be formalized through several distinct mathematical perspectives, ranging from classical difference quotients to modern linear approximation and rigorous analytical limits.
+
+### Difference Quotient
+
+The classical formulation defines the derivative as the limit of the average rate of change (the difference quotient) as the interval approaches zero. Geometrically, this represents the slope of the secant line converging to the slope of the tangent line.
+- Increment Form ($h \to 0$ or $\Delta x \to 0$):
+
+   For an open interval containing $x$, the derivative $f'(x)$ is defined as:$$f'(x) = \lim_{h \to 0} \frac{f(x + h) - f(x)}{h} = \lim_{\Delta x \to 0} \frac{f(x + \Delta x) - f(x)}{\Delta x}$$
+
+   While mathematically identical, the two notations emphasize different mathematical nuances:
+   - $\Delta x$ (Geometric & Differential Focus): Explicitly denotes the actual macroscopic displacement $\Delta x$, expressing the quotient as $\frac{\Delta y}{\Delta x}$. This highlights the geometric ratio of coordinate increments and provides a seamless conceptual bridge to Leibniz's differential notation:$$\lim_{\Delta x \to 0} \frac{\Delta y}{\Delta x} = \frac{dy}{dx}$$
+   - $h$ (Algebraic & Perturbation Focus): Replaces the compound symbol $\Delta x$ with a single scalar parameter representing a small offset or perturbation. This simplifies complex algebraic manipulation (e.g., binomial expansions, Taylor series, and finite difference schemes) by keeping algebraic derivations free of repetitive parentheses and compound symbols.
+
+- Fixed-Point Form ($x \to a$):
+   
+   At a specific evaluation point $a$:$$f'(a) = \lim_{x \to a} \frac{f(x) - f(a)}{x - a}$$
+
+   This representation is especially useful for verifying one-sided derivatives (left- and right-hand limits) to establish differentiability at boundaries or piecewise transitions.
+
+### Carathéodory / Landau
+
+Rather than relying purely on quotient limits, modern analysis often frames differentiation as optimal local linear approximation. This perspective generalizes cleanly to multivariable calculus, Banach spaces, and manifold theory.
+
+- Landau Notation ($o(h)$ Formulation):
+
+   A function $f$ is differentiable at $x$ if there exists a constant $A \in \mathbb{R}$ such that:$$f(x + h) = f(x) + A \cdot h + o(h) \quad \text{as } h \to 0$$
+
+   where $o(h)$ denotes Little-$o$ asymptotic notation satisfying $\lim_{h \to 0} \frac{o(h)}{h} = 0$.The unique constant $A$ is the derivative $f'(x)$. Here, differentiation directly extracts the best linear map approximating the local displacement $\Delta f$.
+
+- Carathéodory's Formulation:
+
+   A function $f$ is differentiable at $a$ if and only if there exists a function $\phi(x)$ that is continuous at $a$ such that:$$f(x) - f(a) = \phi(x)(x - a)$$
+
+   If this holds, the derivative value is given by:$$f'(a) = \phi(a)$$
+
+   Because this formulation eliminates division by zero ($x - a$), it provides an exceptionally elegant proof of the Chain Rule without needing piecewise cases for when the intermediate displacement vanishes.
+
+### $\epsilon$-$\delta$
+
+   The rigorous analytical formulation replaces the informal notion of "approaching zero" with quantified topological neighborhoods via Cauchy and Weierstrass's $\epsilon$-$\delta$ criteria.
+
+   A function $f$ is differentiable at a point $a$ with derivative $L = f'(a)$ if and only if for every $\epsilon > 0$, there exists a $\delta > 0$ such that:$$0 < \vert{}x - a\vert{} < \delta \implies \left\vert{} \frac{f(x) - f(a)}{x - a} - L \right\vert{} < \epsilon$$
+
+   Equivalently, expressed in terms of the increment $h = x - a$:$$\forall \epsilon > 0, \; \exists \delta > 0 \quad \text{such that} \quad 0 < \vert{}h\vert{} < \delta \implies \left\vert{} \frac{f(a + h) - f(a)}{h} - L \right\vert{} < \epsilon$$
+
+   This guarantees that the error between the secant slope and the tangent slope L can be bounded arbitrarily tightly within a sufficiently small punctured symmetric neighborhood around a.
