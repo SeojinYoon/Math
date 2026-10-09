@@ -268,3 +268,82 @@ Rather than relying purely on quotient limits, modern analysis often frames diff
    Equivalently, expressed in terms of the increment $h = x - a$:$$\forall \epsilon > 0, \; \exists \delta > 0 \quad \text{such that} \quad 0 < \vert{}h\vert{} < \delta \implies \left\vert{} \frac{f(a + h) - f(a)}{h} - L \right\vert{} < \epsilon$$
 
    This guarantees that the error between the secant slope and the tangent slope L can be bounded arbitrarily tightly within a sufficiently small punctured symmetric neighborhood around a.
+
+# Definite integral
+
+## Dummy variable
+
+A dummy variable is an auxiliary variable used temporarily during the calculation or expansion of a definite integral; it has no effect on the final value of the integral. In logic and mathematics, it is also referred to as a **bound variable**.
+
+### Core Property: Invariance Under Variable Renaming
+
+The value of a definite integral depends only on the integrand and the limits of integration. Therefore, replacing the dummy variable with any other symbol does not alter the result: $$\int_{a}^{b} f(x) \, dx = \int_{a}^{b} f(t) \, dt = \int_{a}^{b} f(u) \, du$$
+
+**Example:**
+
+   $$\int_{0}^{2} x^2 \, dx = \left[ \frac{1}{3}x^3 \right]_{0}^{2} = \frac{8}{3}$$
+
+   $$\int_{0}^{2} t^2 \, dt = \left[ \frac{1}{3}t^3 \right]_{0}^{2} = \frac{8}{3}$$
+
+Since $x$ and $t$ disappear once evaluated, they are dummy variables.
+
+### Functions Defined by Integrals (Avoiding Variable Collision)
+
+The concept of a dummy variable becomes essential when a variable appears in the limits of integration.
+
+In the Fundamental Theorem of Calculus (FTC), consider a function $F(x)$ defined as: $$F(x) = \int_{a}^{x} f(t) \, dt$$
+* **Free Variable ($x$):** Acts as the independent input to the function $F$, determining the upper limit of integration.
+* **Dummy Variable ($t$):** A temporary variable sweeping through the integration interval from $a$ to $x$ to accumulate the area.
+
+> **Variable Shadowing (Collision):**  
+> Writing $\int_{a}^{x} f(x) \, dx$ creates a notation collision: $x$ simultaneously represents a fixed boundary and a variable of integration. To avoid ambiguity and mathematical errors, the internal integration variable must be separated using a different symbol such as $t$, $u$, or $\tau$.
+
+# Integral
+
+The word **integral** originates from the Latin *integer*, meaning "whole" or "undiminished"—capturing the idea of assembling finely sliced pieces into a complete whole.
+
+Mathematically, what an integral accumulates is the product of an instantaneous rate ($f'(x)$) and an infinitesimal change ($dx$). This product represents a micro-slice: visually, the area of an infinitesimal rectangle ($f'(x) \cdot dx$); physically, an infinitesimal increment of actual change ($dy$).
+
+If tiling rectangles serves as the geometric vehicle, integration is formally the continuous accumulation of infinitesimal rectangles and fundamentally the calculation of a system's net physical change
+
+In kinematics, this duality maps directly to velocity, time, and distance: on a velocity-time plot, the infinitesimal rectangle has height $v(t)$ (rate) and width $dt$ (time), whose product—the micro-area—is arithmetically the slice of distance covered:$$\int_{t_1}^{t_2} \underbrace{v(t)}_{\text{Height}} \cdot \underbrace{dt}_{\text{Base}} = \int_{s_1}^{s_2} \underbrace{ds}_{\text{Slice}} = \underbrace{s(t_2) - s(t_1)}_{\text{Total Change}}$$
+
+Accumulating these rectangles across time simply integrates every momentary displacement to recover the net distance traveled.
+
+## Two Perspectives: Method (Exhaustion) vs. Reality (Change)
+
+To understand integration without confusion, we must distinguish between **the calculation tool we use (The Method of Exhaustion / Riemann Sum)** and **the physical reality it recovers (Accumulated Change)**:
+
+$$\int_{a}^{b} f'(x) \, dx = \lim_{n \to \infty} \sum_{i=1}^{n} \underbrace{f'(x_i)}_{\text{Height}} \cdot \underbrace{\Delta x}_{\text{Base}} = \sum dy = f(b) - f(a)$$
+
+---
+
+### 1. The Method: Method of Exhaustion
+The **Method of Exhaustion** (formalized by Riemann sums) is the mathematical *engine* of definite integration:
+
+1. **Slice the Domain:** Subdivide the interval $[a, b]$ into $n$ ultra-narrow slices of width $\Delta x$.
+2. **Flatten the Curve:** Over an infinitesimal step, the slope variation vanishes, allowing us to approximate each slice as an upright rectangle with height equal to the local rate $f'(x_i)$.
+3. **Tile and Sum:** Sum the areas of all vertical rectangles:
+   $$\text{Area}_n = \sum_{i=1}^{n} f'(x_i) \cdot \Delta x$$
+4. **Take the Limit ($n \to \infty$):** As $\Delta x \to 0$ ($dx$), all approximation gaps disappear, converging rigorously to the definite integral $\int_{a}^{b} f'(x)\,dx$.
+
+The Method of Exhaustion is not wrong; it is the **formal foundation** that proves and computes the value of an integral.
+
+---
+
+### 2. The Physical Reality: What is the Area Actually Doing?
+While the *canvas* displays rectangles being tiled horizontally, look at what the algebra of a single rectangle actually computes:
+
+$$\text{Rectangle Area} = \underbrace{f'(x)}_{\text{Rate } \left(\frac{dy}{dx}\right)} \times \underbrace{dx}_{\text{Step width}} = dy \quad (\text{Actual vertical displacement})$$
+
+* **In Rate Space ($x \text{ vs. } f'(x)$):** The product $f'(x) \cdot dx$ represents a **2D rectangular surface area**.
+* **In State Space ($x \text{ vs. } y$):** That exact same product represents a **1D vertical increment ($dy$)**—how much the cumulative quantity $y$ actually grew during that instant.
+
+---
+
+### 3. Summary of Roles
+
+* **The Method (Method of Exhaustion):** Slices the rate curve into rectangles to make an otherwise curved, changing quantity numerically computable.
+* **The Visual Proxy:** The total 2D area under the $f'(x)$ curve.
+* **The Underlying Truth:** Stacking those rectangular areas is algebraically identical to stringing together infinitesimal changes of state ($dy$), reconstructing the total net change:
+  $$\int_{a}^{b} f'(x) \, dx = \int_{y(a)}^{y(b)} dy = f(b) - f(a)$$
