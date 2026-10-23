@@ -275,6 +275,26 @@ Rather than relying purely on quotient limits, modern analysis often frames diff
 
 A dummy variable is an auxiliary variable used temporarily during the calculation or expansion of a definite integral; it has no effect on the final value of the integral. In logic and mathematics, it is also referred to as a **bound variable**.
 
+### Bound variable
+
+A **bound variable** (or **dummy variable**) is a variable that is bound within the scope of a mathematical operator known as a **binder**. It acts as a temporary placeholder used to iterate through elements, specify integration paths, or formulate logical conditions, and it completely **vanishes** once the operation is evaluated. In other words, a bound variable is a variable that is brought to life only within the scope of a specific operator (binder), remaining completely governed by that operator's rules.
+
+#### Examples
+
+- **Integral operator ($\int$):** In $\int_0^1 x^2 \, dx$, $x$ is bound by the binder $\int$; it evaluates away to yield the scalar constant $\frac{1}{3}$.
+- **Summation/Product operators ($\sum, \prod$):** In $\sum_{i=1}^n i$, the index $i$ is bound by $\sum$. The resulting expression $\frac{n(n+1)}{2}$ depends solely on the free variable $n$.
+- **Logical quantifiers ($\forall, \exists$):** In $\forall x \, (x^2 \ge 0)$, $x$ is a bound variable used to evaluate the truth value of the proposition across the domain.
+- **Function abstraction ($\lambda$-calculus):** In $\lambda x. (x + 1)$, $x$ is bound to mark the input slot for argument substitution.
+
+#### Index perspective
+
+An intuitive and structural way to view a bound variable is as an **index** (or pointer).
+
+A bound variable serves a mathematically identical role in both discrete and continuous spaces:
+- In discrete settings, an integer index $i$ points to elements in a sequence or vector to compute sums ($\sum_i a_i$).
+- In continuous settings, a real-valued variable $x$ acts as a continuous index pointing to values on a function curve to evaluate integrals ($\int f(x) \, dx$).
+
+
 ### Core Property: Invariance Under Variable Renaming
 
 The value of a definite integral depends only on the integrand and the limits of integration. Therefore, replacing the dummy variable with any other symbol does not alter the result: $$\int_{a}^{b} f(x) \, dx = \int_{a}^{b} f(t) \, dt = \int_{a}^{b} f(u) \, du$$

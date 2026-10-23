@@ -477,7 +477,10 @@ Q.E.D. (Quod Erat Demonstrandum - Which was to be demonstrated)
 The Laplace transform is a mathematical tool that converts a complex differential equation in the time domain into an easy-to-solve algebraic equation in the complex frequency domain.
 
 $$ t \rightarrow s $$
+$$\mathcal{L}\{f\}(s) = \int_{0}^{\infty} f(t)e^{-st} \, dt$$
 
+It decomposes a signal into building blocks of the form $e^{-st} = e^{-(\sigma + j\omega)t}$, where each component plays a specific role: the real factor $e^{-\sigma t}$ damps growing signals to guarantee convergence, while the imaginary factor $e^{-j\omega t}$ captures their oscillations. Crucially, because differentiating an exponential simply pulls down the constant ($\frac{d}{dt} e^{st} = s \cdot e^{st}$), time differentiation becomes simple multiplication by $s$ ($\frac{d}{dt} \to s$), transforming calculus into basic algebra. 
+                
 ## Intuition
 
 ### What is the s?
@@ -602,7 +605,6 @@ The Laplace transform is a linear transform (or linear operator), which is one o
 - Additivity:$$\mathcal{L}\{f(t) + g(t)\} = \mathcal{L}\{f(t)\} + \mathcal{L}\{g(t)\}$$
 - Homogeneity (Scalar Multiplication):$$\mathcal{L}\{c f(t)\} = c \mathcal{L}\{f(t)\} \quad (\text{where } c \text{ is a constant})$$
 
-
 ## Example
 
 Let's see what the result of Laplace transform in the various case of f(t)
@@ -724,6 +726,22 @@ Key Takeaways
 - Differentiation becomes multiplication: The differential operator $\frac{d}{dt}$ maps to multiplication by the complex variable $s$.
 - Initial conditions are embedded, not solved: All Cauchy initial conditions ($f(0), f'(0), \dots, f^{(n-1)}(0)$) appear as additive polynomial terms from the very first step, converting a calculus differential equation into a straightforward algebraic equation for $F(s)$
 
+## Difference between Laplace transform and Fourier transform
+
+The Fourier transform views a signal as a combination of persistent oscillations, whereas the Laplace transform extends this perspective by incorporating exponential decay and growth.
+
+| Feature | Fourier Transform (FT) | Laplace Transform (LT) |
+| :--- | :--- | :--- |
+| **Transform Domain** | Pure frequency domain ($\omega$ or $f$) | Complex frequency domain ($s = \sigma + j\omega$) |
+| **Kernel / Basis** | $e^{-j\omega t} = \cos(\omega t) - j\sin(\omega t)$ | $e^{-st} = e^{-\sigma t}e^{-j\omega t}$ |
+| **Definition** | $X(\omega) = \int_{-\infty}^{\infty} x(t) e^{-j\omega t} \, dt$ | $X(s) = \int_{0}^{\infty} x(t) e^{-st} \, dt$ |
+| **Convergence** | $\int_{-\infty}^{\infty} \|x(t)\| dt < \infty$ | Controlled by ROC via $e^{-\sigma t}$ |
+| **Transient Response** | Steady-state response only | Both transient and steady-state |
+| **Growing Signals** | Cannot transform | Can transform if $\sigma$ is sufficient |
+| **Initial Conditions** | Assumes system at rest ($t \to -\infty$) | Naturally includes $x(0^-)$ |
+| **Primary Use** | Audio, communications, DSP | Control systems, circuit transients |
+
+
 ## Application
 
 ### Laplace transform and solving differential equation
@@ -775,7 +793,46 @@ To solve an ODE using the classical approach, we must follow these steps sequent
 As the order of the differential equation increases, Step 4 becomes computationally heavier because we must solve larger systems of simultaneous equations. In contrast, the Laplace transform naturally incorporates the initial conditions from the start, directly yielding the unique solution in a single algebraic workflow.
 
 
+
 # Difference between an Integral Transform and a Standard Differential Operator
 
 - Transform (e.g., Laplace / Fourier): Converts a function $f(t)$ into a new function $F(s)$ in a different domain (variable space)
 - Operator (e.g., Differential / Shift): Maps a function $f(t)$ to another function $g(t)$ within the same domain (variable space)
+
+# Convolution
+
+## Origins
+
+### Probability Theory
+
+In the mid-18th century (1750s–1760s), Thomas Simpson and Joseph-Louis Lagrange encountered an integral of this form while deriving the probability distribution of $Z = X + Y$ for independent continuous random variables $X$ and $Y$:
+
+$$f_Z(z) = \int_{-\infty}^{\infty} f_X(x) f_Y(z - x) \, dx$$
+
+This formulation matches the modern definition of convolution and stands as one of its earliest appearances in mathematics.
+
+### Physics and Partial Differential Equations
+
+Jean le Rond d'Alembert, Leonhard Euler, and later George Green further developed this mathematical structure in the context of wave mechanics, heat conduction, and potential theory. 
+
+The integral formulation,
+
+$$\int f(\tau)g(t - \tau) \, d\tau$$
+
+was established to represent the principle of linear superposition—expressing how distributed sources across a domain combine with a system's fundamental response (such as an impulse response or Green's function) to produce the overall field or effect.
+
+### Connection to the Laplace Transform: Discovery, Not Invention
+
+Convolution was not derived as a byproduct of the Laplace transform; rather, it was an independent, preexisting operation that naturally aligned with integral transforms.
+
+In the 1780s, Pierre-Simon Laplace introduced generating functions and integral transforms to solve differential and difference equations. When examining the product of two transformed functions, $F(s)G(s)$, mathematicians discovered that inverting this product back into the time domain yields exactly the convolution integral:
+
+$$\mathcal{L}^{-1}\{F(s) \cdot G(s)\} = (f * g)(t) = \int_{0}^{t} f(\tau)g(t - \tau) \, d\tau$$
+
+## Convolution and Convolution Theorem
+
+Convolution is a mathematical operation, whereas the Convolution Theorem is a fundamental property that connects this operation across different mathematical domains (such as time/spatial and frequency domains). In other words, the Convolution Theorem states that the Laplace transform of the convolution of two signals is equal to the product of their individual Laplace transforms.
+
+- Expression
+    - Convolution: $$(f * g)(t) = \int_{-\infty}^{\infty} f(\tau) g(t - \tau) \, d\tau$$
+    - Convolution Theorem: $$\mathcal{L}\{f * g\} = F(s) \cdot G(s)$$ $$\text{or} \quad \mathcal{F}\{f * g\} = F(\omega) \cdot G(\omega)$$
