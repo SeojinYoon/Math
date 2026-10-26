@@ -821,7 +821,66 @@ $$\int f(\tau)g(t - \tau) \, d\tau$$
 
 was established to represent the principle of linear superposition—expressing how distributed sources across a domain combine with a system's fundamental response (such as an impulse response or Green's function) to produce the overall field or effect.
 
-### Connection to the Laplace Transform: Discovery, Not Invention
+## Dummy variable
+
+$$(f * g)(t) = \int_{-\infty}^{\infty} f(\tau) g(t - \tau) \, d\tau$$
+
+The convolution is basically the product of two functions $f(x)$ and $f(y)$. However, you can see the $\tau$ in the above form. I always wonder why mathematicians introduce the term $\tau$ in there. 
+
+The answer lies in geometric projection and coordinate transformation.
+
+Fundamentally, when we combine two independent inputs $x$ and $y$, their joint space is a two-dimensional plane $(x, y)$, and their product $f(x)g(y)$ lives over this entire area. If we were to integrate over the whole plane without any constraints, we would end up with a single scalar number:$$\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x)g(y) \, dx \, dy = \left(\int_{-\infty}^{\infty} f(x) \, dx\right) \left(\int_{-\infty}^{\infty} g(y) \, dy\right)$$
+
+However, in many real-world problems—such as finding the total outcome of two random variables $Z = X + Y$, or accumulating a system's historical responses up to the current time $t$—we are not interested in the individual pairs $(x, y)$ themselves. Instead, our sole focus is on their combined sum:$$x + y = t$$
+
+This constraint defines a family of diagonal level lines (with slope $-1$) across the 2D plane. Every point along the line $x + y = t$ yields the exact same total output $t$. To collapse the 2D product space down to a 1D function of $t$, we must integrate (or project) along these diagonal lines.
+
+This is where the dummy variable $\tau$ comes into play:
+1. A New Coordinate System: We perform a change of variables from $(x, y)$ to $(t, \tau)$.
+    - $t = x + y$: The target axis representing the cumulative value.
+    - $\tau = x$: The auxiliary (dummy) axis that sweeps through all possible combinations $(x, y) = (\tau, \, t - \tau)$ lying on that constant-sum line.
+2. Dimension Reduction via Line Integral: To compute the value at a specific point $t$, we scan along the line from $\tau = -\infty$ to $\infty$, accumulating all the contributing products $f(\tau)g(t - \tau)$:$$(f * g)(t) = \int_{-\infty}^{\infty} f(\tau) g(t - \tau) \, d\tau$$
+
+Once this integration is performed, the internal coordinate $\tau$ is integrated out and disappears, leaving behind a pure 1D representation parameterized solely by $t$.
+
+In short, $\tau$ is the scanning coordinate along the 2D level line $x + y = t$, introduced specifically to project a two-dimensional product space into a one-dimensional summary function.
+
+### Stock market example
+
+The convolution is basically the product of two functions $f(x)$ and $f(y)$. However, you can see the $\tau$ in the above form. I always wonder why mathematicians introduce the term $\tau$ in there.
+
+A clear intuition comes from macroeconomics and stock markets, where today's stock valuation is a cumulative response to policy decisions over time.
+
+Consider two variables and their governing functions:
+- $x$ and $f(x)$ (The Cause & Shock Magnitude):
+    - $x$: The exact date when the central bank announced an interest rate decision.
+    - $f(x)$: The policy shock function representing the size and direction of that move (e.g., $+0.25\%$, $+0.75\%$, or $-0.5\%$). It quantifies how large the cause was on date $x$.
+- $y$ and $g(y)$ (The Latency & Unit Impulse Response):
+    - $y$: The transmission lag—the elapsed time it takes for a policy shift to work its way through corporate lending, consumer demand, and earnings reports before reaching equity prices.
+    - $g(y)$: The market transfer function (impulse response). It measures what proportion of a unit rate hike gets priced in after an elapsed time $y$. Rather than reacting instantly, markets exhibit a delayed, peaked, and slowly fading response curve over months.
+
+When we multiply them together, $f(x) \times g(y)$ computes the isolated financial impact: the exact dollar-value or percentage shift exerted on stocks by a specific rate decision of size $f(x)$ after a lag of $y$.
+
+If we look across the entire 2D plane $(x, y)$, the product $f(x)g(y)$ maps every conceivable combination of past decision dates and potential lags. But when asking "What is driving stock prices today at time $t$?", we only care about shocks whose timeline satisfies one strict conservation rule:
+
+$$\text{Decision date}(x) + \text{Transmission lag}(y) = \text{Current market date}(t)$$
+
+$$x + y = t \implies y = t - x$$
+
+This constraint carves a diagonal line of slope $-1$ across the $(x, y)$ plane. For an interest rate hike from date $x$ to be felt in today's stock market ($t$), its transmission lag must be exactly $y = t - x$:
+- A rate hike 12 months ago ($x = t - 12$) impacts the market today by $f(t - 12) \times g(12)$.
+- A rate hike 3 months ago ($x = t - 3$) impacts the market today by $f(t - 3) \times g(3)$.
+- A policy decision announced today ($x = t$) impacts the market by $f(t) \times g(0)$.
+
+All of these distinct policy moves hit the market simultaneously at time $t$.
+
+To aggregate all these concurrent influences into today's price, we need a coordinate to sweep along this diagonal line. That is the dummy variable $\tau$:
+1. We set the decision date to $x = \tau$, which automatically fixes the required lag to $y = t - \tau$.
+2. We integrate over $\tau$, summing the individual impacts $f(\tau)g(t - \tau)$ of every past decision:$$(f * g)(t) = \int_{-\infty}^{t} f(\tau) g(t - \tau) \, d\tau$$
+
+Once we integrate over all historical decision dates $\tau$, the dummy scanning variable disappears. The resulting $(f * g)(t)$ is a 1D function representing the net cumulative impact on the stock market at date $t$—the accumulated sum of history meeting at the present moment.
+
+## Connection to the Laplace Transform: Discovery, Not Invention
 
 Convolution was not derived as a byproduct of the Laplace transform; rather, it was an independent, preexisting operation that naturally aligned with integral transforms.
 
